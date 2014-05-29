@@ -5,15 +5,15 @@ Created on May 29, 2014
 
 @summary:
 Problem Analysis:
-    The original python source file is in `QRT2csv.py`
+    The original python source file is in `QRT2csv.py.bak`
 
     Alignment of memory causes the different QRT format defination
 
     My code file is `QRTparser.py`.
 
 Usage:
-    python QRTparser.py QRT_FILEPATH [OUT_DIRPATH]
-    
+	python QRTparser.py QRT_FILEPATH [OUT_DIRPATH]
+	
 Thanks to the `QRT2csv.py`. Revised by qyou on May 28, 2014. Enjoy!
 '''
 from __future__ import with_statement, print_function 
@@ -43,6 +43,9 @@ class QRTParser(object):
     def _parse_future_map(self, pos, bytes_of_future):
         self.fp.seek(pos)
         buf = self.fp.read(bytes_of_future)
+        #future_name, = struct.unpack_from('7s', buf[:7])
+        #future_name = "".join(future_name)
+        #future_name = future_name.strip('\x00')
         future_name = buf[:7]
         future_name = future_name.strip('\x00')
         records_number, = struct.unpack_from('L', buf[10:14])
@@ -120,7 +123,6 @@ class QRTParser(object):
         if not os.path.exists(out_dir):
             os.mkdir(out_dir)
         print("---Start writing files...---")
-        alignment = False
         try: 
             self._parse_all(record_size, record_begin_position, code_number, out_dir, alignment)
         except:
